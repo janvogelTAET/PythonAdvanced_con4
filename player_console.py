@@ -24,35 +24,30 @@ class PlayerConsole(PlayerBase):
         # TODO: return desired column from user input (0..6) using
         # use self._input to read keys, use self._output to draw current token position
         while True:
-            # Draw the 'ghost' token or indicator at the top
             self._output.draw_token(self._current_col, -1, self._player)
-            
-            key = self._input.get_key()
+            key = self._input.read_key()
 
             if key == Keys.LEFT and self._current_col > 0:
-                # Erase old position and move left
                 self._output.draw_token(self._current_col, -1, GameToken.EMPTY)
                 self._current_col -= 1
             elif key == Keys.RIGHT and self._current_col < 6:
-                # Erase old position and move right
                 self._output.draw_token(self._current_col, -1, GameToken.EMPTY)
                 self._current_col += 1
             elif key == Keys.ENTER:
+                self._output.draw_token(self._current_col, -1, GameToken.EMPTY)  # ← Ghost löschen
                 return self._current_col
-        
 
     def draw_board(self, board: list, state: GameState) -> None:
         # YOUR CODE HERE
         # TODO: draw grid with tokens using self._output
         # 1. Clear or reset cursor if necessary
         # 2. Iterate through the board 2D list
+        self._output.draw_grid()  # ← Gitter zuerst!
         for r in range(6):
             for c in range(7):
-                token = board[r][c]
-                self._output.draw_token(c, r, token)
-        
-        # 3. Display whose turn it is
-        Ansi.gotoXY(1, 15) # Adjust Y based on your grid height
+                self._output.draw_token(c, r, board[r][c])
+
+        Ansi.gotoXY(1, 15)
         if state == GameState.TURN_RED:
             print("Current Turn: RED   ")
         elif state == GameState.TURN_YELLOW:
