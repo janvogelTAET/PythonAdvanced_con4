@@ -27,7 +27,7 @@ class OutputConsole(OutputBase):
     def draw_token(self, x: int, y: int, token: GameToken = GameToken.EMPTY) -> None:
 
         term_x = (x * 5) + 3        
-        # Wenn y = -1 (Ghost Token über dem Feld), setzen wir es direkt über das Grid
+        # wenn y größer oder gleich 0 ist, dann ist es eine reguläre Position auf dem Spielfeld
         if y < 0:
             term_y = self.VERTICAL_OFFSET - 1
         else:
